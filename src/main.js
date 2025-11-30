@@ -10,8 +10,12 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x000000, 1);
 
 const { scene, camera, uniforms } = createScene(renderer);
-const controls = createControls(camera);
 const hud = createHud();
+
+const controls = createControls(camera, renderer.domElement, (locked) => {
+  hud.setPointerLock(locked);
+});
+hud.setPointerLock(false);
 
 let lastTime = performance.now();
 let fpsTime = 0;
