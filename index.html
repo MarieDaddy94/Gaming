@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SolarForge – Procedural Fractal Solar System</title>
+    <link rel="stylesheet" href="styles/main.css" />
+  </head>
+  <body>
+    <div id="overlay">
+      <h1>SolarForge</h1>
+      <div id="hud">
+        <div class="row"><span class="label">Position</span><span id="hud-position">0, 0, 0</span></div>
+        <div class="row"><span class="label">Velocity</span><span id="hud-velocity">0</span></div>
+        <div class="row"><span class="label">Seed</span><span id="hud-seed">0</span></div>
+        <div class="row"><span class="label">FPS</span><span id="hud-fps">0</span></div>
+      </div>
+      <div class="hint">Use mouse + WASDQE to fly. Shift to boost.</div>
+    </div>
+    <canvas id="app"></canvas>
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>
