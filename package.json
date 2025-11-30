@@ -1,0 +1,13 @@
+{
+  "name": "solarforge",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve ."
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  }
+}
