@@ -9,12 +9,13 @@ const KEYMAP = {
   KeyE: new THREE.Vector3(0, 1, 0),
 };
 
-export function createControls(camera) {
+export function createControls(camera, domElement, onPointerLockChange) {
   const velocity = new THREE.Vector3();
   const direction = new THREE.Vector3();
   const look = new THREE.Vector2();
   const pressed = new Set();
   let seed = 0;
+  let pointerLocked = false;
 
   const sensitivity = 0.002;
   const baseSpeed = 6;
@@ -23,7 +24,22 @@ export function createControls(camera) {
 
   camera.position.set(0, 1.5, 6);
 
+  const controllableKeys = new Set([
+    'KeyW',
+    'KeyA',
+    'KeyS',
+    'KeyD',
+    'KeyQ',
+    'KeyE',
+    'Space',
+    'ShiftLeft',
+    'ShiftRight',
+  ]);
+
   window.addEventListener('keydown', (event) => {
+    if (controllableKeys.has(event.code)) {
+      event.preventDefault();
+    }
     pressed.add(event.code);
     if (event.code === 'Space') {
       seed = Math.floor((camera.position.length() + Date.now()) % 99999);
@@ -31,10 +47,29 @@ export function createControls(camera) {
   });
 
   window.addEventListener('keyup', (event) => {
+    if (controllableKeys.has(event.code)) {
+      event.preventDefault();
+    }
     pressed.delete(event.code);
   });
 
-  window.addEventListener('mousemove', (event) => {
+  const updatePointerLockState = () => {
+    pointerLocked = document.pointerLockElement === domElement;
+    if (onPointerLockChange) {
+      onPointerLockChange(pointerLocked);
+    }
+  };
+
+  document.addEventListener('pointerlockchange', updatePointerLockState);
+
+  domElement.addEventListener('click', () => {
+    if (!pointerLocked && domElement.requestPointerLock) {
+      domElement.requestPointerLock();
+    }
+  });
+
+  domElement.addEventListener('mousemove', (event) => {
+    if (!pointerLocked) return;
     look.x -= event.movementX * sensitivity;
     look.y -= event.movementY * sensitivity;
   });
@@ -63,5 +98,6 @@ export function createControls(camera) {
     update,
     getSpeed: () => velocity.length(),
     getSeed: () => seed,
+    isPointerLocked: () => pointerLocked,
   };
 }
