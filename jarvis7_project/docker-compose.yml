@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  jarvis-brain:
+    build: .
+    # Use host networking for simplicity on Linux, or ports for Mac/Win
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./jarvis7:/app/jarvis7
+      - ./learned_skills:/app/learned_skills
+      - ./memory_store:/app/memory_store
+      # Allow Brain to spawn sibling Docker containers for the Evolver
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - JARVIS_SKILL_ROOT=/app/learned_skills
+      - JARVIS_FILE_ROOT=/app
+      - JARVIS_CONTEXT_MODE=tier4
